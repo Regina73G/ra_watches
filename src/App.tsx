@@ -8,8 +8,8 @@ interface AppState {
   clocks: {city: string; timeZone: number, id: string}[];
 }
 
-export default class App extends React.Component<{}, AppState> {
-  constructor(props: {}) {
+export default class App extends React.Component<object, AppState> {
+  constructor(props: object) {
     super(props);
     this.state = {
       clocks: [],
