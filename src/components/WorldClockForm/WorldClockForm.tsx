@@ -1,4 +1,5 @@
 import React from "react";
+import "./WorldClockForm.css";
 
 interface FormState {
   city: string; 
@@ -34,14 +35,18 @@ export default class WorldClockForm extends React.Component<FormProps, FormState
     errors.timeZoneErr = "";
 
     if(timeZone === null) {
-      errors.timeZoneErr = "Это поле обязательно";
-      isValid = false;
-    } else if(timeZone < -12 || timeZone > 12) {
-        errors.timeZoneErr = "Введите число от -12 до 12, включая 0";
-        isValid = false;
-    }
+      this.setState(prevState => ({
+        errors: {...prevState.errors,timeZoneErr: "Это поле обязательно"}
+      }));
 
-    this.setState({errors});
+      isValid = false;
+    } else if(isNaN(timeZone) || timeZone < -12 || timeZone > 12) {
+      this.setState(prevState => ({
+        errors: {...prevState.errors,timeZoneErr: "Введите число от -12 до 12, включая 0"}
+      }));
+
+      isValid = false;
+    }
 
     return isValid;
   }
@@ -53,7 +58,8 @@ export default class WorldClockForm extends React.Component<FormProps, FormState
   handleTimezoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     this.setState({
-      timeZone: value ? parseFloat(value) : null
+      timeZone: value ? parseFloat(value) : null,
+      errors: { timeZoneErr: "" }
     });
   };
 
@@ -74,7 +80,7 @@ export default class WorldClockForm extends React.Component<FormProps, FormState
 
     return (
       <form className="form" onSubmit={this.handleSubmit}>
-        <div>
+        <div className="form_input-box">
           <label className="form_label" htmlFor="city">Название</label>
           <input 
             className="form_input" 
@@ -84,7 +90,7 @@ export default class WorldClockForm extends React.Component<FormProps, FormState
             required
             />
         </div>
-        <div>
+        <div className="form_input-box">
           <label className="form_label" htmlFor="timeZone">Временная зона</label>
           <input 
             className="form_input" 
